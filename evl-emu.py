@@ -5,6 +5,7 @@ Support for DSC alarm control panels using IT-100 integration module by emulatin
 """
 
 import logging
+from logging.handlers import RotatingFileHandler
 import sys
 import itertools
 import os
@@ -24,7 +25,8 @@ REQUIREMENTS = ['pyserial']
 DEFAULT_PARTITIONS = 1
 DEFAULT_ZONES = 64
 
-SERIAL_PORT = '/dev/it100'
+# SERIAL_PORT = '/dev/it100'
+SERIAL_PORT = '/dev/ttyr00'
 SERIAL_BAUD = 9600
 NETWORK_HOST = '0.0.0.0'
 NETWORK_PORT = 4025
@@ -725,8 +727,11 @@ if __name__ == "__main__":
 	logger.setLevel(logging.WARNING)
 
 	# File log options (Just put in home directory for now)
-	logpath = str(os.path.expanduser('~')) + '/evl-emu.log'
-	fh = logging.FileHandler(logpath)
+	#logpath = str(os.path.expanduser('~')) + '/evl-emu.log'
+	logpath = str(os.path.dirname(os.path.abspath(__file__))) + '/evl-emu.log'
+
+	#fh = logging.FileHandler(logpath)
+	fh = RotatingFileHandler(logpath, 'a', 10000000, 5)
 	fh.setFormatter(fileformatter)
 	logger.addHandler(fh)
 
